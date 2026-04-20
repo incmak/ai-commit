@@ -5,8 +5,8 @@ export const cursorPreset: ProviderPreset = {
 	id: "cursor",
 	name: "Cursor",
 	binary: "cursor",
-	buildArgs(prompt: string): readonly string[] {
-		return ["-p", prompt];
+	buildArgs(prompt: string, extraArgs: readonly string[]): readonly string[] {
+		return ["-p", ...extraArgs, prompt];
 	},
 	parseOutput(raw: string): string {
 		return cleanOutput(raw);

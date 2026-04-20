@@ -39,6 +39,43 @@ Generate commit messages using any AI coding assistant you already have installe
 | `aiCommit.extraInstructions` | — | Additional instructions appended to the prompt |
 | `aiCommit.maxDiffLength` | `20000` | Max diff chars before truncation |
 | `aiCommit.timeout` | `60` | CLI timeout in seconds |
+| `aiCommit.verbosity` | `2` | Commit message detail level (1–5) |
+| `aiCommit.claude.extraArgs` | `[]` | Extra Claude CLI args (e.g., `["--model", "claude-sonnet-4-6"]`). Empty = CLI default |
+| `aiCommit.gemini.extraArgs` | `[]` | Extra Gemini CLI args (e.g., `["--model", "gemini-2.5-flash"]`) |
+| `aiCommit.codex.extraArgs` | `[]` | Extra Codex CLI args (e.g., `["--model", "gpt-5"]`) |
+| `aiCommit.copilot.extraArgs` | `[]` | Extra Copilot CLI args |
+| `aiCommit.cursor.extraArgs` | `[]` | Extra Cursor CLI args |
+
+### Verbosity levels
+
+`aiCommit.verbosity` controls commit message detail:
+
+| Level | Output |
+|-------|--------|
+| 1 | Subject only (≤50 chars) — default |
+| 2 | Subject + 1 short body line |
+| 3 | Subject + 2-3 bullets (what & why) |
+| 4 | Subject + grouped bullet body (detailed) |
+| 5 | Full commit: subject + motivation, changes, rationale, impact |
+
+Set in settings:
+
+```json
+{ "aiCommit.verbosity": 3 }
+```
+
+### Picking a model
+
+By default, each CLI uses its own default model. To override, set `extraArgs` with the model flag for that CLI. Examples:
+
+```json
+{
+  "aiCommit.claude.extraArgs": ["--model", "claude-haiku-4-5"],
+  "aiCommit.gemini.extraArgs": ["--model", "gemini-2.5-flash"]
+}
+```
+
+Check each CLI's `--help` for supported flags and model names.
 
 ## Custom Provider Example
 

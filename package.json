@@ -1,8 +1,8 @@
 {
-  "name": "ai-commit",
-  "displayName": "AI Commit",
+  "name": "ai-commit-any",
+  "displayName": "AI Commit (Any CLI)",
   "description": "Generate commit messages using any AI coding assistant (Claude, Gemini, Codex, Copilot, Cursor, or custom CLI)",
-  "version": "0.1.0",
+  "version": "0.3.1",
   "publisher": "incmak",
   "license": "MIT",
   "repository": {
@@ -87,6 +87,36 @@
           "default": "",
           "description": "Custom CLI command template. Use {prompt} as placeholder. Example: my-ai --generate \"{prompt}\""
         },
+        "aiCommit.claude.extraArgs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Extra CLI args for Claude (e.g., [\"--model\", \"claude-sonnet-4-6\"]). Empty = CLI default."
+        },
+        "aiCommit.gemini.extraArgs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Extra CLI args for Gemini (e.g., [\"--model\", \"gemini-2.5-flash\"]). Empty = CLI default."
+        },
+        "aiCommit.codex.extraArgs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Extra CLI args for Codex (e.g., [\"--model\", \"gpt-5\"]). Empty = CLI default."
+        },
+        "aiCommit.copilot.extraArgs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Extra CLI args for GitHub Copilot CLI. Empty = CLI default."
+        },
+        "aiCommit.cursor.extraArgs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Extra CLI args for Cursor CLI. Empty = CLI default."
+        },
         "aiCommit.promptTemplate": {
           "type": "string",
           "default": "Generate a concise git commit message for these staged changes.\nUse conventional commit format (type: description).\nOutput ONLY the commit message, nothing else.\n\n{diff}",
@@ -112,6 +142,21 @@
           "minimum": 10,
           "maximum": 300,
           "description": "CLI timeout in seconds"
+        },
+        "aiCommit.verbosity": {
+          "type": "number",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 5,
+          "enum": [1, 2, 3, 4, 5],
+          "enumDescriptions": [
+            "1 — Subject only, <50 chars",
+            "2 — Subject + 1 short body line",
+            "3 — Subject + 2-3 body bullets (what & why)",
+            "4 — Subject + detailed body, grouped bullets",
+            "5 — Full conventional commit: subject, body, rationale, impact"
+          ],
+          "description": "Commit message verbosity level (1=terse, 5=detailed)"
         }
       }
     }

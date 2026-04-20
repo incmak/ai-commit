@@ -5,8 +5,8 @@ export const codexPreset: ProviderPreset = {
 	id: "codex",
 	name: "OpenAI Codex",
 	binary: "codex",
-	buildArgs(prompt: string): readonly string[] {
-		return ["exec", prompt];
+	buildArgs(prompt: string, extraArgs: readonly string[]): readonly string[] {
+		return ["exec", ...extraArgs, prompt];
 	},
 	parseOutput(raw: string): string {
 		return cleanOutput(raw);

@@ -5,8 +5,8 @@ export const claudePreset: ProviderPreset = {
 	id: "claude",
 	name: "Claude Code",
 	binary: "claude",
-	buildArgs(prompt: string): readonly string[] {
-		return ["-p", "--output-format", "text", prompt];
+	buildArgs(prompt: string, extraArgs: readonly string[]): readonly string[] {
+		return ["-p", "--output-format", "text", ...extraArgs, prompt];
 	},
 	parseOutput(raw: string): string {
 		return cleanOutput(raw);

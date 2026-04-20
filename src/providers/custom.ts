@@ -10,7 +10,7 @@ export function createCustomPreset(commandTemplate: string): ProviderPreset {
 		id: "custom",
 		name: "Custom",
 		binary,
-		buildArgs(prompt: string): readonly string[] {
+		buildArgs(prompt: string, _extraArgs: readonly string[]): readonly string[] {
 			return argTemplate.map((arg) => arg.replace("{prompt}", prompt));
 		},
 		parseOutput(raw: string): string {

@@ -15,7 +15,7 @@ export interface ProviderPreset {
 	readonly id: string;
 	readonly name: string;
 	readonly binary: string;
-	buildArgs(prompt: string): readonly string[];
+	buildArgs(prompt: string, extraArgs: readonly string[]): readonly string[];
 	parseOutput(raw: string): string;
 }
 

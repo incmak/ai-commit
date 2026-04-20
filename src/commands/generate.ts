@@ -3,6 +3,7 @@ import { getConfig } from "../util/config.js";
 import { resolveProvider } from "../providers/registry.js";
 import { getRepository, getStagedDiff, setCommitMessage } from "../git/service.js";
 import { truncateDiff } from "../util/diff.js";
+import { verbosityGuidance } from "../util/verbosity.js";
 
 export async function generateCommitMessage(): Promise<void> {
 	try {
@@ -14,9 +15,12 @@ export async function generateCommitMessage(): Promise<void> {
 
 		const provider = await resolveProvider(config);
 
-		const prompt = config.extraInstructions
-			? `${config.promptTemplate}\n\n${config.extraInstructions}`
-			: config.promptTemplate;
+		const guidance = [verbosityGuidance(config.verbosity)];
+		if (config.extraInstructions) guidance.push(config.extraInstructions);
+		const guidanceBlock = guidance.join("\n\n");
+		const prompt = config.promptTemplate.includes("{diff}")
+			? config.promptTemplate.replace("{diff}", `${guidanceBlock}\n\n{diff}`)
+			: `${config.promptTemplate}\n\n${guidanceBlock}`;
 
 		const message = await vscode.window.withProgress(
 			{

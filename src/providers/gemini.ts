@@ -5,8 +5,8 @@ export const geminiPreset: ProviderPreset = {
 	id: "gemini",
 	name: "Gemini CLI",
 	binary: "gemini",
-	buildArgs(prompt: string): readonly string[] {
-		return [prompt];
+	buildArgs(prompt: string, extraArgs: readonly string[]): readonly string[] {
+		return [...extraArgs, prompt];
 	},
 	parseOutput(raw: string): string {
 		return cleanOutput(raw);

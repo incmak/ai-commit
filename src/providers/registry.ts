@@ -28,6 +28,7 @@ const AUTO_DETECT_ORDER: readonly string[] = [
 function presetToProvider(
 	preset: ProviderPreset,
 	timeoutMs: number,
+	extraArgs: readonly string[],
 ): AiProvider {
 	return {
 		id: preset.id,
@@ -44,7 +45,7 @@ function presetToProvider(
 			token: vscode.CancellationToken,
 		): Promise<string> {
 			const fullPrompt = prompt.replace("{diff}", diff);
-			const args = preset.buildArgs(fullPrompt);
+			const args = preset.buildArgs(fullPrompt, extraArgs);
 			const result = await executeCli(
 				preset.binary,
 				args,
@@ -88,14 +89,18 @@ export async function resolveProvider(
 			);
 		}
 		const preset = createCustomPreset(config.customCommand);
-		return presetToProvider(preset, timeoutMs);
+		return presetToProvider(preset, timeoutMs, []);
 	}
 
 	if (config.provider === "auto") {
 		for (const id of AUTO_DETECT_ORDER) {
 			const preset = PRESETS.find((p) => p.id === id);
 			if (!preset) continue;
-			const provider = presetToProvider(preset, timeoutMs);
+			const provider = presetToProvider(
+				preset,
+				timeoutMs,
+				config.extraArgs[preset.id] ?? [],
+			);
 			const available = await provider.checkAvailability();
 			if (available) return provider;
 		}
@@ -109,7 +114,11 @@ export async function resolveProvider(
 		throw new Error(`Unknown provider: ${config.provider}`);
 	}
 
-	const provider = presetToProvider(preset, timeoutMs);
+	const provider = presetToProvider(
+		preset,
+		timeoutMs,
+		config.extraArgs[preset.id] ?? [],
+	);
 	const available = await provider.checkAvailability();
 	if (!available) {
 		throw new Error(
