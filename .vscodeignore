@@ -1,0 +1,13 @@
+src/**
+test/**
+node_modules/**
+.vscode/**
+.github/**
+claude-user-memory/**
+.gitignore
+tsconfig.json
+esbuild.config.mjs
+vitest.config.ts
+package-lock.json
+*.vsix
+**/*.map

@@ -1,0 +1,135 @@
+{
+  "name": "ai-commit",
+  "displayName": "AI Commit",
+  "description": "Generate commit messages using any AI coding assistant (Claude, Gemini, Codex, Copilot, Cursor, or custom CLI)",
+  "version": "0.1.0",
+  "publisher": "incmak",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/incmak/ai-commit"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "Machine Learning"
+  ],
+  "keywords": [
+    "git",
+    "commit",
+    "ai",
+    "claude",
+    "gemini",
+    "codex",
+    "copilot",
+    "cursor"
+  ],
+  "icon": "resources/icon.png",
+  "main": "./out/extension.js",
+  "extensionDependencies": [
+    "vscode.git"
+  ],
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      {
+        "command": "aiCommit.generate",
+        "title": "Generate Commit Message",
+        "category": "AI Commit",
+        "icon": "$(sparkle)"
+      }
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "aiCommit.generate",
+          "group": "navigation",
+          "when": "scmProvider == git"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "aiCommit.generate",
+          "when": "scmProvider == git"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "AI Commit",
+      "properties": {
+        "aiCommit.provider": {
+          "type": "string",
+          "default": "auto",
+          "enum": [
+            "auto",
+            "claude",
+            "gemini",
+            "codex",
+            "copilot",
+            "cursor",
+            "custom"
+          ],
+          "enumDescriptions": [
+            "Auto-detect the first available AI CLI",
+            "Claude Code CLI (claude -p)",
+            "Gemini CLI (gemini)",
+            "OpenAI Codex CLI (codex exec)",
+            "GitHub Copilot CLI (gh copilot)",
+            "Cursor CLI (cursor -p)",
+            "Custom command (configure aiCommit.custom.command)"
+          ],
+          "description": "Which AI provider to use for generating commit messages"
+        },
+        "aiCommit.custom.command": {
+          "type": "string",
+          "default": "",
+          "description": "Custom CLI command template. Use {prompt} as placeholder. Example: my-ai --generate \"{prompt}\""
+        },
+        "aiCommit.promptTemplate": {
+          "type": "string",
+          "default": "Generate a concise git commit message for these staged changes.\nUse conventional commit format (type: description).\nOutput ONLY the commit message, nothing else.\n\n{diff}",
+          "description": "Prompt template sent to the AI. Use {diff} as placeholder for the staged diff.",
+          "editPresentation": "multilineText"
+        },
+        "aiCommit.extraInstructions": {
+          "type": "string",
+          "default": "",
+          "description": "Additional instructions appended to the prompt (e.g., 'always use feat/fix/refactor prefixes')",
+          "editPresentation": "multilineText"
+        },
+        "aiCommit.maxDiffLength": {
+          "type": "number",
+          "default": 20000,
+          "minimum": 1000,
+          "maximum": 100000,
+          "description": "Maximum diff length in characters before truncation"
+        },
+        "aiCommit.timeout": {
+          "type": "number",
+          "default": 60,
+          "minimum": 10,
+          "maximum": 300,
+          "description": "CLI timeout in seconds"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "watch": "node esbuild.config.mjs --watch",
+    "vscode:prepublish": "NODE_ENV=production node esbuild.config.mjs",
+    "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}
